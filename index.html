@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NRB Cloud Solutions – Microsoft Azure Consultancy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --white: #ffffff;
+      --off-white: #f7f7f5;
+      --mid: #e8e8e4;
+      --muted: #999;
+      --blue: #1464f4;
+      --blue-soft: #e8f0fe;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--black); overflow-x: hidden; cursor: none; }
+
+    .cursor { width: 10px; height: 10px; background: var(--black); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width 0.3s, height 0.3s; }
+    .cursor-ring { width: 36px; height: 36px; border: 1.5px solid rgba(0,0,0,0.35); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: width 0.3s, height 0.3s; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 24px 64px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.88); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-bottom: 1px solid rgba(0,0,0,0.06); }
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-logo img { height: 32px; }
+    .nav-logo-text { font-weight: 500; font-size: 15px; letter-spacing: -0.02em; color: var(--black); }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--muted); font-size: 14px; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--black); }
+    .nav-cta { background: var(--black); color: var(--white); padding: 10px 22px; border-radius: 100px; font-size: 14px; font-weight: 500; text-decoration: none; transition: background 0.2s, transform 0.2s; }
+    .nav-cta:hover { background: #333; transform: scale(1.02); }
+
+    /* HERO */
+    .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 140px 64px 100px; position: relative; overflow: hidden; }
+    .hero-diagonal { position: absolute; top: 0; right: 0; width: 52%; height: 100%; background: var(--off-white); clip-path: polygon(16% 0, 100% 0, 100% 100%, 0% 100%); pointer-events: none; z-index: 0; }
+    .hero-diagonal::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(-45deg, transparent, transparent 28px, rgba(0,0,0,0.022) 28px, rgba(0,0,0,0.022) 29px); }
+    .hero-glow { position: absolute; top: -100px; right: -100px; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(ellipse at 40% 40%, rgba(20,100,244,0.07) 0%, transparent 70%); pointer-events: none; }
+    .hero-inner { position: relative; z-index: 1; max-width: 1120px; }
+
+    .hero-badge { display: inline-flex; align-items: center; gap: 10px; background: var(--blue-soft); border: 1px solid rgba(20,100,244,0.15); border-radius: 100px; padding: 6px 16px 6px 10px; margin-bottom: 40px; opacity: 0; animation: fadeUp 0.8s 0.1s forwards; }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+    .hero-badge span { font-size: 12px; font-weight: 500; color: var(--blue); letter-spacing: 0.04em; }
+
+    .hero-h1 { font-family: 'Fraunces', serif; font-weight: 300; font-size: clamp(54px, 7.5vw, 104px); line-height: 0.95; letter-spacing: -0.035em; max-width: 720px; color: var(--black); opacity: 0; animation: fadeUp 0.9s 0.2s forwards; }
+    .hero-h1 em { font-style: italic; color: var(--blue); }
+    .hero-sub { margin-top: 36px; font-size: 17px; font-weight: 300; color: #555; max-width: 460px; line-height: 1.7; opacity: 0; animation: fadeUp 0.9s 0.35s forwards; }
+    .hero-actions { margin-top: 48px; display: flex; gap: 20px; align-items: center; opacity: 0; animation: fadeUp 0.9s 0.5s forwards; }
+
+    .btn-primary { background: var(--black); color: var(--white); padding: 15px 32px; border-radius: 100px; font-size: 15px; font-weight: 500; text-decoration: none; transition: background 0.2s, transform 0.2s, box-shadow 0.2s; }
+    .btn-primary:hover { background: #1a1a1a; transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.15); }
+    .btn-ghost { color: var(--black); font-size: 15px; font-weight: 400; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: gap 0.2s; }
+    .btn-ghost:hover { gap: 14px; }
+    .btn-ghost svg { width: 16px; height: 16px; }
+
+    .hero-float { position: absolute; right: 72px; top: 50%; transform: translateY(-44%); z-index: 2; display: flex; flex-direction: column; gap: 16px; opacity: 0; animation: fadeUp 1s 0.7s forwards; }
+    .stat-card { background: var(--white); border: 1px solid var(--mid); border-radius: 18px; padding: 20px 26px; box-shadow: 0 8px 40px rgba(0,0,0,0.07); min-width: 190px; }
+    .stat-num { font-family: 'Fraunces', serif; font-size: 34px; font-weight: 600; letter-spacing: -0.04em; line-height: 1; color: var(--black); }
+    .stat-num.blue { color: var(--blue); }
+    .stat-label { font-size: 11.5px; color: var(--muted); margin-top: 5px; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* CERT STRIP */
+    .cert-strip { padding: 44px 64px; background: var(--off-white); border-top: 1px solid var(--mid); border-bottom: 1px solid var(--mid); }
+    .cert-strip-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; text-align: center; }
+    .cert-row { display: flex; align-items: stretch; justify-content: center; flex-wrap: wrap; }
+    .cert-item { display: flex; align-items: center; gap: 12px; padding: 0 32px; border-right: 1px solid var(--mid); }
+    .cert-item:last-child { border-right: none; }
+    .cert-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--blue-soft); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .cert-icon svg { width: 18px; height: 18px; stroke: var(--blue); }
+    .cert-text { font-size: 13px; font-weight: 500; color: #444; line-height: 1.3; }
+    .cert-sub { font-size: 11px; color: var(--muted); }
+
+    /* SECTION COMMONS */
+    .section-tag { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+    .section-tag::before { content: ''; display: inline-block; width: 18px; height: 1px; background: var(--muted); }
+    .section-h2 { font-family: 'Fraunces', serif; font-weight: 300; font-size: clamp(36px, 4.5vw, 60px); line-height: 1.05; letter-spacing: -0.03em; }
+    .section-h2 em { font-style: italic; color: var(--blue); }
+
+    /* SERVICES */
+    .services { padding: 120px 64px; max-width: 1200px; margin: 0 auto; }
+    .services-intro { max-width: 600px; margin-bottom: 64px; }
+    .services-intro p { margin-top: 20px; font-size: 15.5px; color: #666; line-height: 1.7; }
+
+    .pillar-tabs { display: flex; border: 1px solid var(--mid); border-radius: 14px; overflow: hidden; margin-bottom: 32px; }
+    .pillar-tab { flex: 1; padding: 18px 22px; background: transparent; border: none; border-right: 1px solid var(--mid); cursor: none; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--muted); transition: background 0.2s, color 0.2s; text-align: left; line-height: 1.4; }
+    .pillar-tab:last-child { border-right: none; }
+    .pillar-tab.active { background: var(--black); color: var(--white); }
+    .pillar-tab:hover:not(.active) { background: var(--off-white); color: var(--black); }
+    .pillar-tab-num { font-size: 10px; letter-spacing: 0.1em; opacity: 0.5; display: block; margin-bottom: 4px; }
+
+    .pillar-panel { display: none; }
+    .pillar-panel.active { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+
+    .service-card { background: var(--off-white); padding: 44px 36px; position: relative; overflow: hidden; transition: background 0.3s; }
+    .service-card:hover { background: var(--black); }
+    .service-card:hover .service-num, .service-card:hover .service-title, .service-card:hover .service-desc { color: var(--white); }
+    .service-card:hover .service-icon { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.08); }
+    .service-card:hover .service-icon svg { stroke: white; }
+    .service-card:hover .service-proof { border-color: rgba(255,255,255,0.12); color: #888; }
+    .service-card:hover .service-arrow { opacity: 1; transform: translate(0,0); }
+
+    .service-num { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 32px; transition: color 0.3s; }
+    .service-icon { width: 48px; height: 48px; border-radius: 12px; border: 1.5px solid var(--mid); background: var(--white); display: flex; align-items: center; justify-content: center; margin-bottom: 22px; transition: border-color 0.3s, background 0.3s; }
+    .service-icon svg { width: 22px; height: 22px; stroke: var(--black); transition: stroke 0.3s; }
+    .service-title { font-family: 'Fraunces', serif; font-weight: 300; font-size: 21px; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 12px; transition: color 0.3s; }
+    .service-desc { font-size: 13.5px; line-height: 1.7; color: #777; transition: color 0.3s; }
+    .service-card:hover .service-desc { color: #aaa; }
+    .service-proof { display: inline-block; margin-top: 16px; font-size: 11px; font-weight: 500; letter-spacing: 0.04em; color: var(--blue); border: 1px solid rgba(20,100,244,0.2); border-radius: 100px; padding: 4px 12px; transition: border-color 0.3s, color 0.3s; }
+    .service-arrow { position: absolute; bottom: 32px; right: 32px; opacity: 0; transform: translate(-6px, 6px); transition: opacity 0.3s, transform 0.3s; }
+    .service-arrow svg { width: 20px; height: 20px; stroke: white; }
+
+    /* NEIL */
+    .neil-section { position: relative; background: var(--black); padding: 130px 64px; clip-path: polygon(0 4%, 100% 0, 100% 96%, 0 100%); margin: 60px 0; overflow: hidden; }
+    .neil-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: start; }
+    .neil-left h2 { font-family: 'Fraunces', serif; font-weight: 300; font-size: clamp(32px, 4vw, 52px); line-height: 1.08; letter-spacing: -0.03em; color: var(--white); margin-bottom: 24px; }
+    .neil-left h2 em { font-style: italic; color: #7aadff; }
+    .neil-left p { font-size: 14.5px; line-height: 1.78; color: #888; margin-bottom: 14px; }
+    .neil-credentials { margin-top: 32px; display: flex; flex-direction: column; gap: 11px; }
+    .cred-item { display: flex; align-items: center; gap: 12px; font-size: 13.5px; color: #bbb; }
+    .cred-dot { width: 6px; height: 6px; border-radius: 50%; background: #7aadff; flex-shrink: 0; }
+
+    .neil-right { display: flex; flex-direction: column; gap: 14px; }
+    .achievement-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 24px 26px; display: flex; gap: 18px; align-items: flex-start; transition: background 0.2s; }
+    .achievement-card:hover { background: rgba(255,255,255,0.09); }
+    .ach-metric { font-family: 'Fraunces', serif; font-size: 36px; font-weight: 600; letter-spacing: -0.04em; line-height: 1; color: #7aadff; flex-shrink: 0; min-width: 76px; }
+    .ach-text h4 { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 5px; }
+    .ach-text p { font-size: 13px; color: #666; line-height: 1.55; }
+
+    /* PROCESS */
+    .process { padding: 120px 64px; max-width: 1200px; margin: 0 auto; }
+    .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--mid); border-radius: 22px; overflow: hidden; margin-top: 64px; }
+    .process-step { padding: 44px 32px; border-right: 1px solid var(--mid); position: relative; }
+    .process-step:last-child { border-right: none; }
+    .step-num { font-family: 'Fraunces', serif; font-size: 44px; font-weight: 300; color: var(--mid); line-height: 1; margin-bottom: 20px; }
+    .step-title { font-size: 16px; font-weight: 500; margin-bottom: 10px; letter-spacing: -0.01em; }
+    .step-desc { font-size: 13.5px; color: var(--muted); line-height: 1.65; }
+    .step-connector { position: absolute; top: 44px; right: -14px; width: 28px; height: 28px; background: var(--white); border: 1px solid var(--mid); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 1; }
+    .step-connector svg { width: 12px; height: 12px; }
+
+    /* MARKETS */
+    .markets { padding: 100px 64px; background: var(--off-white); border-top: 1px solid var(--mid); }
+    .markets-inner { max-width: 1200px; margin: 0 auto; }
+    .markets-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 64px; }
+    .market-card { background: var(--white); border: 1px solid var(--mid); border-radius: 22px; padding: 44px; position: relative; overflow: hidden; }
+    .market-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--blue); }
+    .market-card h3 { font-family: 'Fraunces', serif; font-weight: 300; font-size: 26px; letter-spacing: -0.02em; margin-bottom: 14px; }
+    .market-card p { font-size: 14px; color: #666; line-height: 1.7; margin-bottom: 28px; }
+    .market-stat { display: flex; gap: 28px; flex-wrap: wrap; }
+    .m-stat-num { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 600; letter-spacing: -0.03em; color: var(--blue); line-height: 1; }
+    .m-stat-label { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+    /* PRICING */
+    .pricing { padding: 120px 64px; max-width: 1200px; margin: 0 auto; }
+    .pricing-intro { max-width: 540px; margin-bottom: 64px; }
+    .pricing-intro p { margin-top: 18px; font-size: 15.5px; color: #666; line-height: 1.7; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; max-width: 860px; margin: 0 auto; }
+    .price-card { border: 1px solid var(--mid); border-radius: 22px; padding: 40px; position: relative; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; }
+    .price-card:hover { transform: translateY(-5px); box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
+    .price-card.featured { background: var(--black); border-color: var(--black); }
+    .price-card.featured .price-name, .price-card.featured .price-amount, .price-card.featured .price-desc { color: var(--white); }
+    .price-card.featured .price-features li { border-color: rgba(255,255,255,0.07); color: #aaa; }
+    .price-card.featured .price-unit { color: #777; }
+    .price-card.featured .btn-price { background: var(--white); color: var(--black); }
+    .price-card.featured .btn-price:hover { background: #eee; }
+    .price-card.featured .price-check { background: rgba(20,100,244,0.2); }
+    .featured-badge { position: absolute; top: 18px; right: 18px; background: var(--blue); color: white; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; padding: 4px 12px; border-radius: 100px; }
+    .price-name { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+    .price-amount { font-family: 'Fraunces', serif; font-size: 44px; font-weight: 600; letter-spacing: -0.04em; line-height: 1; color: var(--black); }
+    .price-unit { font-size: 14px; color: var(--muted); font-weight: 300; margin-left: 4px; }
+    .price-desc { font-size: 14px; color: #666; margin-top: 14px; line-height: 1.6; }
+    .price-card.featured .price-desc { color: #999; }
+    .price-features { list-style: none; margin-top: 28px; }
+    .price-features li { font-size: 13.5px; color: #555; padding: 11px 0; border-bottom: 1px solid var(--mid); display: flex; align-items: center; gap: 10px; }
+    .price-features li:last-child { border-bottom: none; }
+    .price-check { width: 16px; height: 16px; border-radius: 50%; background: var(--blue-soft); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .price-check svg { width: 9px; height: 9px; stroke: var(--blue); }
+    .btn-price { display: block; margin-top: 28px; text-align: center; background: var(--off-white); color: var(--black); padding: 13px; border-radius: 100px; font-size: 14px; font-weight: 500; text-decoration: none; transition: background 0.2s, transform 0.2s; }
+    .btn-price:hover { background: var(--mid); }
+
+    /* INDUSTRIES */
+    .industries { padding: 100px 64px; border-top: 1px solid var(--mid); }
+    .industries-inner { max-width: 1200px; margin: 0 auto; }
+    .industries-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 64px; }
+    .industry-card { border: 1px solid var(--mid); border-radius: 18px; padding: 32px 26px; transition: border-color 0.3s, transform 0.3s; }
+    .industry-card:hover { border-color: var(--blue); transform: translateY(-4px); }
+    .industry-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--blue-soft); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+    .industry-icon svg { width: 20px; height: 20px; stroke: var(--blue); }
+    .industry-card h4 { font-size: 15px; font-weight: 500; margin-bottom: 8px; }
+    .industry-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* CTA */
+    .cta-section { padding: 140px 64px; text-align: center; position: relative; overflow: hidden; }
+    .cta-geo { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 130%, rgba(20,100,244,0.06) 0%, transparent 60%); pointer-events: none; }
+    .cta-section h2 { font-family: 'Fraunces', serif; font-weight: 300; font-size: clamp(44px, 6vw, 84px); line-height: 1; letter-spacing: -0.04em; max-width: 680px; margin: 0 auto 18px; position: relative; z-index: 1; }
+    .cta-section h2 em { font-style: italic; color: var(--blue); }
+    .cta-section p { font-size: 17px; color: var(--muted); margin-bottom: 44px; position: relative; z-index: 1; }
+    .cta-actions { display: flex; gap: 16px; justify-content: center; position: relative; z-index: 1; flex-wrap: wrap; }
+    .btn-secondary { background: transparent; color: var(--black); border: 1.5px solid var(--mid); padding: 15px 30px; border-radius: 100px; font-size: 15px; font-weight: 500; text-decoration: none; transition: border-color 0.2s, background 0.2s; }
+    .btn-secondary:hover { border-color: var(--black); background: var(--off-white); }
+
+    /* FOOTER */
+    footer { background: var(--black); padding: 80px 64px 48px; color: #666; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; padding-bottom: 56px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .footer-brand img { height: 30px; filter: invert(1); margin-bottom: 14px; }
+    .footer-brand p { font-size: 13.5px; line-height: 1.7; max-width: 270px; color: #555; }
+    .footer-contact { margin-top: 18px; }
+    .footer-contact a { color: #555; text-decoration: none; display: block; font-size: 13px; transition: color 0.2s; margin-bottom: 4px; }
+    .footer-contact a:hover { color: white; }
+    .footer-col h5 { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #333; margin-bottom: 18px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col a { font-size: 13.5px; color: #555; text-decoration: none; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--white); }
+    .footer-bottom { padding-top: 36px; display: flex; justify-content: space-between; align-items: center; }
+    .footer-bottom p { font-size: 12px; }
+    .footer-socials { display: flex; gap: 12px; }
+    .footer-socials a { width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; color: #555; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+    .footer-socials a:hover { border-color: rgba(255,255,255,0.3); color: white; }
+    .footer-socials svg { width: 14px; height: 14px; }
+
+    /* SCROLL REVEAL */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    @media (max-width: 960px) {
+      nav { padding: 20px 24px; }
+      .nav-links { display: none; }
+      .hero { padding: 120px 24px 80px; }
+      .hero-diagonal, .hero-float { display: none; }
+      .cert-strip { padding: 40px 24px; }
+      .cert-row { flex-direction: column; gap: 20px; }
+      .cert-item { border-right: none; padding: 0; }
+      .services { padding: 80px 24px; }
+      .pillar-tabs { flex-direction: column; }
+      .pillar-panel.active { grid-template-columns: 1fr; }
+      .neil-section { padding: 80px 24px; clip-path: none; margin: 0; }
+      .neil-inner { grid-template-columns: 1fr; gap: 48px; }
+      .process { padding: 80px 24px; }
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      .process-step { border-bottom: 1px solid var(--mid); }
+      .step-connector { display: none; }
+      .markets { padding: 80px 24px; }
+      .markets-grid { grid-template-columns: 1fr; }
+      .pricing { padding: 80px 24px; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .industries { padding: 80px 24px; }
+      .industries-grid { grid-template-columns: 1fr 1fr; }
+      .cta-section { padding: 100px 24px; }
+      footer { padding: 60px 24px 40px; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">
+    <img src="NRB_Logo_1.png" alt="NRB Cloud Solutions" />
+    <span class="nav-logo-text">NRB Cloud Solutions</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#neil">About Neil</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#industries">Industries</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Book a consultation</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-diagonal"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <div class="badge-dot"></div>
+      <span>Microsoft Azure · Cloud Architecture · Security · FinOps</span>
+    </div>
+    <h1 class="hero-h1">Principal-level<br/><em>Azure</em> expertise,<br/>direct to you.</h1>
+    <p class="hero-sub">Elite cloud architecture, security, and financial optimisation for mid-to-large enterprises across the UK and Europe — delivered by one of the industry's most experienced Azure practitioners.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Book a consultation</a>
+      <a href="#services" class="btn-ghost">
+        Explore services
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="hero-float">
+    <div class="stat-card">
+      <div class="stat-num blue">20+</div>
+      <div class="stat-label">Years enterprise Azure experience</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">40%</div>
+      <div class="stat-label">Reduction in security misconfigurations</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num blue">15%</div>
+      <div class="stat-label">Average client cloud cost savings</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">60%</div>
+      <div class="stat-label">Reduction in account compromise risk</div>
+    </div>
+  </div>
+</section>
+
+<!-- CERT STRIP -->
+<div class="cert-strip">
+  <p class="cert-strip-label">Certifications &amp; enterprise pedigree</p>
+  <div class="cert-row">
+    <div class="cert-item">
+      <div class="cert-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div><div class="cert-text">Azure Solutions Architect Expert</div><div class="cert-sub">Microsoft Certified</div></div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+      <div><div class="cert-text">Azure Administrator Associate</div><div class="cert-sub">Microsoft Certified</div></div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8z"/></svg></div>
+      <div><div class="cert-text">Director, Cloud Architecture &amp; Security</div><div class="cert-sub">Credera UK</div></div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4"/></svg></div>
+      <div><div class="cert-text">European CCoE Lead</div><div class="cert-sub">Walgreens Boots Alliance</div></div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+      <div><div class="cert-text">FinOps Practice Founder</div><div class="cert-sub">Credera UK</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-intro reveal">
+    <div class="section-tag">What we offer</div>
+    <h2 class="section-h2">Three pillars.<br/>One <em>expert</em>.</h2>
+    <p>NRB Cloud Solutions provides a focused portfolio of strategic advisory, architectural design, and implementation services exclusively for the Microsoft Azure ecosystem — spanning the full cloud lifecycle from strategy through to ongoing optimisation.</p>
+  </div>
+
+  <div class="pillar-tabs reveal">
+    <button class="pillar-tab active" onclick="switchPillar(0)">
+      <span class="pillar-tab-num">Pillar 01</span>Strategic Cloud Architecture &amp; Design
+    </button>
+    <button class="pillar-tab" onclick="switchPillar(1)">
+      <span class="pillar-tab-num">Pillar 02</span>Advanced Cloud Security &amp; Compliance
+    </button>
+    <button class="pillar-tab" onclick="switchPillar(2)">
+      <span class="pillar-tab-num">Pillar 03</span>Cloud Governance &amp; FinOps
+    </button>
+  </div>
+
+  <div class="pillar-panel active" id="pillar-0">
+    <div class="service-card">
+      <div class="service-num">01.1</div>
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"/></svg></div>
+      <h3 class="service-title">Azure Landing Zone Design &amp; Build</h3>
+      <p class="service-desc">Architecting and deploying secure, compliant, automated Azure foundations covering identity, networking, governance, and security. Built using Policy-as-Code with Bicep and Terraform for consistency and repeatability.</p>
+      <span class="service-proof">↓ 40% misconfigurations — Credera UK</span>
+      <div class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">01.2</div>
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg></div>
+      <h3 class="service-title">Cloud Adoption &amp; Migration Strategy</h3>
+      <p class="service-desc">Strategic roadmaps and target operating models using the Microsoft Cloud Adoption Framework — ensuring smooth cloud journeys with minimal disruption and accelerated time-to-value for the business.</p>
+      <span class="service-proof">↑ 30% faster time-to-value</span>
+      <div class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">01.3</div>
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg></div>
+      <h3 class="service-title">High-Availability &amp; Disaster Recovery</h3>
+      <p class="service-desc">Resilient, multi-region Azure architectures with hub-spoke network topologies and robust HA/DR strategies — engineered to meet or exceed enterprise uptime SLAs for mission-critical applications.</p>
+      <span class="service-proof">99.9%+ uptime SLA track record</span>
+      <div class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </div>
+  </div>
+
+  <div class="pillar-panel" id="pillar-1">
+    <div class="service-card">
+      <div class="service-num">02.1</div>
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <h3 class="service-title">Zero-Trust Security Implementation</h3>
+      <p class="service-desc">Modern Zero-Trust security models leveraging Entra ID, Conditional Access, and the Microsoft Defender for Cloud suite — assuming no implicit trust and continuously validating every digital interaction.</p>
+      <span class="service-proof">↓ 60% account compromise risk — BAT</span>
+      <div class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">02.2</div>
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+      <h3 class="service-title">Security Operations &amp; Threat Management</h3>
+      <p class="service-desc">Expert advisory for Microsoft Sentinel (SIEM/SOAR) implementation and optimisation — enabling proactive, intelligent threat detection and automated incident response across your enterprise environment.</p>
+      <span class="service-proof">ISO 27001 · NIST · CIS Benchmarks</span>
+      <div class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">02.3</div>
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+      <h3 class="service-title">Compliance &amp; Governance Automation</h3>
+      <p class="service-desc">Policy-as-Code implementation using Azure Policy ensuring continuous adherence to ISO 27001, NIST, GDPR, and CIS Benchmarks — automating governance to eliminate compliance drift and configuration risk.</p>
+      <span class="service-proof">Continuous compliance enforcement</span>
+      <div class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </div>
+  </div>
+
+  <div class="pillar-panel" id="pillar-2">
+    <div class="service-card">
+      <div class="service-num">03.1</div>
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+      <h3 class="service-title">FinOps Practice Establishment</h3>
+      <p class="service-desc">Building internal FinOps capability within a Cloud Center of Excellence — defining governance structures, cost allocation models, and embedding a culture of financial accountability across engineering and finance teams.</p>
+      <span class="service-proof">CCoE built at Walgreens Boots Alliance</span>
+      <div class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">03.2</div>
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <h3 class="service-title">Cloud Cost Optimisation</h3>
+      <p class="service-desc">Comprehensive analysis of cloud usage, resource rightsizing, Azure Reservations and Savings Plans — identifying and eliminating wasted expenditure across your estate to directly improve cloud ROI.</p>
+      <span class="service-proof">Up to 15% client cloud cost savings</span>
+      <div class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">03.3</div>
+      <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
+      <h3 class="service-title">Cost Management &amp; Reporting Strategy</h3>
+      <p class="service-desc">Robust tagging strategies and reporting dashboards providing granular cloud spend visibility — enabling accurate showback/chargeback, budget forecasting, and data-driven decisions about resource consumption.</p>
+      <span class="service-proof">Real-time cost governance dashboards</span>
+      <div class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </div>
+  </div>
+</section>
+
+<!-- NEIL SECTION -->
+<section class="neil-section" id="neil">
+  <div class="neil-inner">
+    <div class="neil-left reveal">
+      <div class="section-tag" style="color:#555"><span style="width:18px;height:1px;background:#555;display:inline-block;margin-right:10px"></span>Meet your consultant</div>
+      <h2>Neil Robert Bryan.<br/><em>20 years.</em><br/>One focused<br/>practice.</h2>
+      <p>NRB Cloud Solutions is built on a simple premise: you deserve direct access to the most senior expert in the room — not a junior consultant reading from a playbook.</p>
+      <p>Neil is a top-tier Azure Cloud &amp; Security Architect who has driven enterprise-scale cloud transformation for globally recognised organisations. As Director of Cloud Architecture &amp; Security at Credera UK and Principal Cloud Architect / CCoE Lead at Walgreens Boots Alliance, he has solved the most complex cloud challenges enterprises face.</p>
+      <p>Every engagement is led, designed, and delivered personally by Neil. No layers. No handoffs. No juniors learning on your time.</p>
+      <div class="neil-credentials">
+        <div class="cred-item"><div class="cred-dot"></div>Microsoft Certified: Azure Solutions Architect Expert</div>
+        <div class="cred-item"><div class="cred-dot"></div>Microsoft Certified: Azure Administrator Associate</div>
+        <div class="cred-item"><div class="cred-dot"></div>Director, Cloud Architecture &amp; Security — Credera UK</div>
+        <div class="cred-item"><div class="cred-dot"></div>Principal Cloud Architect / European CCoE Lead — Walgreens Boots Alliance</div>
+        <div class="cred-item"><div class="cred-dot"></div>Cloud Security Lead — British American Tobacco</div>
+        <div class="cred-item"><div class="cred-dot"></div>Senior engagements at Atos and KPMG</div>
+      </div>
+    </div>
+    <div class="neil-right reveal reveal-delay-2">
+      <div class="achievement-card">
+        <div class="ach-metric">40%</div>
+        <div class="ach-text">
+          <h4>Reduction in security misconfigurations</h4>
+          <p>Achieved at Credera UK through the design and implementation of Azure Landing Zones with Policy-as-Code enforcement via Bicep and Terraform.</p>
+        </div>
+      </div>
+      <div class="achievement-card">
+        <div class="ach-metric">60%</div>
+        <div class="ach-text">
+          <h4>Reduction in account compromise risk</h4>
+          <p>Delivered for British American Tobacco through a Zero-Trust implementation using Entra ID, Conditional Access, and Microsoft Defender for Cloud.</p>
+        </div>
+      </div>
+      <div class="achievement-card">
+        <div class="ach-metric">30%</div>
+        <div class="ach-text">
+          <h4>Faster time-to-value on cloud programmes</h4>
+          <p>Achieved through strategic roadmapping and Microsoft CAF-aligned migration strategies across multiple large-scale enterprise engagements.</p>
+        </div>
+      </div>
+      <div class="achievement-card">
+        <div class="ach-metric">15%</div>
+        <div class="ach-text">
+          <h4>Average client cloud cost savings</h4>
+          <p>Delivered through FinOps practice establishment and hands-on cost optimisation at Credera UK and Walgreens Boots Alliance.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="section-tag reveal">How it works</div>
+  <h2 class="section-h2 reveal">From brief to <em>live</em> —<br/>a clear path forward.</h2>
+  <div class="process-steps reveal">
+    <div class="process-step">
+      <div class="step-num">01</div>
+      <div class="step-title">Discovery &amp; Audit</div>
+      <p class="step-desc">Neil conducts a thorough assessment of your existing Azure environment, business goals, compliance requirements, and cloud spend. No templates — a genuine expert evaluation.</p>
+      <div class="step-connector"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6h8M7 3l3 3-3 3"/></svg></div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">02</div>
+      <div class="step-title">Architecture &amp; Roadmap</div>
+      <p class="step-desc">A tailored solution is designed using the Microsoft CAF and Well-Architected Framework — with a clear technical roadmap, delivery timeline, and fixed-price commercial proposal.</p>
+      <div class="step-connector"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6h8M7 3l3 3-3 3"/></svg></div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">03</div>
+      <div class="step-title">Implementation</div>
+      <p class="step-desc">Precise execution using Infrastructure-as-Code (Bicep/Terraform), automated testing, and staged rollouts — ensuring zero disruption to live operations throughout the engagement.</p>
+      <div class="step-connector"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6h8M7 3l3 3-3 3"/></svg></div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">04</div>
+      <div class="step-title">Handover &amp; Advisory</div>
+      <p class="step-desc">Full documentation, team knowledge transfer, and optional ongoing retainer — empowering your team with the skills and autonomy to run your Azure environment confidently.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET CONTEXT -->
+<section class="markets">
+  <div class="markets-inner">
+    <div class="section-tag reveal">Market context</div>
+    <h2 class="section-h2 reveal">A high-growth market demanding<br/><em>specialist</em> expertise.</h2>
+    <div class="markets-grid">
+      <div class="market-card reveal reveal-delay-1">
+        <h3>European Cloud Market</h3>
+        <p>The European cloud market is experiencing explosive, sustained growth — driven by accelerated digital transformation, hybrid cloud complexity, GDPR compliance demands, the rise of AI workloads, and increasing FinOps pressure.</p>
+        <div class="market-stat">
+          <div><div class="m-stat-num">$153B</div><div class="m-stat-label">Market value 2024</div></div>
+          <div><div class="m-stat-num">16.8%</div><div class="m-stat-label">CAGR to 2032</div></div>
+          <div><div class="m-stat-num">$525B</div><div class="m-stat-label">Projected by 2032</div></div>
+        </div>
+      </div>
+      <div class="market-card reveal reveal-delay-2">
+        <h3>Microsoft Azure Consulting</h3>
+        <p>Azure holds ~24% global cloud market share and its consulting market is growing at 14.5% CAGR. Azure specialisation means access to a vast, loyal, and rapidly expanding enterprise customer base across the UK and EU.</p>
+        <div class="market-stat">
+          <div><div class="m-stat-num">$10.5B</div><div class="m-stat-label">Azure consulting 2024</div></div>
+          <div><div class="m-stat-num">14.5%</div><div class="m-stat-label">CAGR to 2033</div></div>
+          <div><div class="m-stat-num">$34.9B</div><div class="m-stat-label">Projected by 2033</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="pricing-intro reveal">
+    <div class="section-tag">Pricing &amp; engagement models</div>
+    <h2 class="section-h2">Transparent,<br/>value-based <em>pricing</em>.</h2>
+    <p>Three flexible engagement structures designed to match the nature and duration of your challenge — from ad-hoc expert advisory through to long-term strategic partnership.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card featured reveal reveal-delay-1">
+      <div class="featured-badge">Most popular</div>
+      <div class="price-name">Project-Based</div>
+      <div><span class="price-amount">Fixed</span><span class="price-unit">price</span></div>
+      <p class="price-desc">Defined scope, fixed deliverables, full cost certainty. Ideal for Landing Zone builds, Zero-Trust implementations, and FinOps maturity assessments.</p>
+      <ul class="price-features">
+        <li><div class="price-check"><svg viewBox="0 0 10 10" fill="none" stroke-width="2"><path d="M2 5l2.5 2.5L8 3"/></svg></div>Defined scope &amp; deliverables</li>
+        <li><div class="price-check"><svg viewBox="0 0 10 10" fill="none" stroke-width="2"><path d="M2 5l2.5 2.5L8 3"/></svg></div>Fixed price, no surprises</li>
+        <li><div class="price-check"><svg viewBox="0 0 10 10" fill="none" stroke-width="2"><path d="M2 5l2.5 2.5L8 3"/></svg></div>Full IaC documentation</li>
+        <li><div class="price-check"><svg viewBox="0 0 10 10" fill="none" stroke-width="2"><path d="M2 5l2.5 2.5L8 3"/></svg></div>Team knowledge transfer</li>
+      </ul>
+      <a href="#contact" class="btn-price">Start a project</a>
+    </div>
+    <div class="price-card reveal reveal-delay-2">
+      <div class="price-name">Retainer</div>
+      <div><span class="price-amount">Monthly</span><span class="price-unit">advisory</span></div>
+      <p class="price-desc">Long-term strategic partnership providing ongoing FinOps-as-a-Service, virtual CCoE leadership, or retained security advisory at the principal level.</p>
+      <ul class="price-features">
+        <li><div class="price-check"><svg viewBox="0 0 10 10" fill="none" stroke-width="2"><path d="M2 5l2.5 2.5L8 3"/></svg></div>Guaranteed monthly availability</li>
+        <li><div class="price-check"><svg viewBox="0 0 10 10" fill="none" stroke-width="2"><path d="M2 5l2.5 2.5L8 3"/></svg></div>Virtual CCoE leadership</li>
+        <li><div class="price-check"><svg viewBox="0 0 10 10" fill="none" stroke-width="2"><path d="M2 5l2.5 2.5L8 3"/></svg></div>FinOps-as-a-Service option</li>
+        <li><div class="price-check"><svg viewBox="0 0 10 10" fill="none" stroke-width="2"><path d="M2 5l2.5 2.5L8 3"/></svg></div>Retained security advisory</li>
+      </ul>
+      <a href="#contact" class="btn-price">Discuss a retainer</a>
+    </div>
+  </div>
+</section>
+
+<!-- INDUSTRIES -->
+<section class="industries" id="industries">
+  <div class="industries-inner">
+    <div class="section-tag reveal">Target sectors</div>
+    <h2 class="section-h2 reveal">Built for regulated,<br/><em>complex</em> environments.</h2>
+    <p class="reveal" style="margin-top:18px;font-size:15.5px;color:#666;max-width:520px;line-height:1.7;">NRB Cloud Solutions focuses on sectors where security, compliance, and cloud performance directly impact business outcomes and where the stakes of getting it wrong are highest.</p>
+    <div class="industries-grid">
+      <div class="industry-card reveal reveal-delay-1">
+        <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <h4>Financial Services</h4>
+        <p>Stringent FCA/PRA compliance, data governance, and enterprise security for banks, insurers, and fintechs adopting Azure at scale.</p>
+      </div>
+      <div class="industry-card reveal reveal-delay-2">
+        <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <h4>Healthcare</h4>
+        <p>GDPR-compliant, HIPAA-aligned cloud architectures protecting sensitive patient data for NHS Trusts and private healthcare providers.</p>
+      </div>
+      <div class="industry-card reveal reveal-delay-3">
+        <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <h4>Government &amp; Public Sector</h4>
+        <p>Sovereign cloud requirements, G-Cloud compliance, and security-first architectures supporting public sector digital transformation.</p>
+      </div>
+      <div class="industry-card reveal reveal-delay-4">
+        <div class="industry-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <h4>Technology &amp; SaaS</h4>
+        <p>Cloud-native modernisation, DevSecOps, and scalable Azure foundations for software companies and technology-led enterprises.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="cta-geo"></div>
+  <h2 class="reveal">Let's solve your<br/><em>cloud</em> challenge.</h2>
+  <p class="reveal">No sales pitch. No junior consultants. Just an honest conversation with Neil about your goals.</p>
+  <div class="cta-actions reveal">
+    <a href="mailto:info@nrbcloudsolutions.com" class="btn-primary">info@nrbcloudsolutions.com</a>
+    <a href="https://linkedin.com" class="btn-secondary" target="_blank">Connect on LinkedIn</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="NRB_Logo_1.png" alt="NRB Cloud Solutions" />
+        <p>Principal-level Microsoft Azure consultancy for enterprises across the UK and Europe. Cloud architecture, security, and FinOps — delivered personally by Neil Bryan.</p>
+        <div class="footer-contact">
+          <a href="mailto:info@nrbcloudsolutions.com">info@nrbcloudsolutions.com</a>
+          <a href="#">Paphos, Cyprus · Serving UK &amp; Europe</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="#services">Azure Landing Zone Design</a></li>
+          <li><a href="#services">Cloud Migration Strategy</a></li>
+          <li><a href="#services">Zero-Trust Security</a></li>
+          <li><a href="#services">Microsoft Sentinel</a></li>
+          <li><a href="#services">FinOps &amp; Cost Optimisation</a></li>
+          <li><a href="#services">Governance Automation</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#neil">About Neil</a></li>
+          <li><a href="#process">Our Process</a></li>
+          <li><a href="#industries">Industries</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Engagement</h5>
+        <ul>
+          <li><a href="#pricing">Day Rate Advisory</a></li>
+          <li><a href="#pricing">Project Engagements</a></li>
+          <li><a href="#pricing">Monthly Retainer</a></li>
+          <li><a href="#pricing">Virtual CCoE Lead</a></li>
+          <li><a href="#pricing">FinOps-as-a-Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 N.R.B. Cloud Solutions Ltd. Registered in Cyprus (Companies Law, Cap. 113). All rights reserved.</p>
+      <div class="footer-socials">
+        <a href="#" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2zM4 6a2 2 0 100-4 2 2 0 000 4z"/></svg>
+        </a>
+        <a href="mailto:info@nrbcloudsolutions.com" aria-label="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  });
+  (function animRing() {
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  })();
+  document.querySelectorAll('a, button, .service-card, .achievement-card, .price-card, .industry-card, .market-card').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.width='14px'; cursor.style.height='14px'; ring.style.width='52px'; ring.style.height='52px'; });
+    el.addEventListener('mouseleave', () => { cursor.style.width='10px'; cursor.style.height='10px'; ring.style.width='36px'; ring.style.height='36px'; });
+  });
+
+  // Pillar tabs
+  function switchPillar(idx) {
+    document.querySelectorAll('.pillar-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+    document.querySelectorAll('.pillar-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Nav scroll shadow
+  window.addEventListener('scroll', () => {
+    document.getElementById('mainNav').style.boxShadow = window.scrollY > 40 ? '0 1px 0 rgba(0,0,0,0.07)' : 'none';
+  });
+</script>
+</body>
+</html>
