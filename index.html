@@ -634,7 +634,7 @@
   <h2 class="reveal">Let's solve your<br/><em>cloud</em> challenge.</h2>
   <p class="reveal">No sales pitch. No junior consultants. Just an honest conversation with Neil about your goals.</p>
   <div class="cta-actions reveal">
-    <a href="/cdn-cgi/l/email-protection#234a4d454c634d5141404f4c5647504c4f56574a4c4d500d404c4e" class="btn-primary"><span class="__cf_email__" data-cfemail="056c6b636a456b776766696a7061766a6970716c6a6b762b666a68">[email&#160;protected]</span></a>
+    <a href="/cdn-cgi/l/email-protection#99f0f7fff6d9f7ebfbfaf5f6ecfdeaf6f5ecedf0f6f7eab7faf6f4" class="btn-primary"><span class="__cf_email__" data-cfemail="234a4d454c634d5141404f4c5647504c4f56574a4c4d500d404c4e">[email&#160;protected]</span></a>
     <a href="https://www.linkedin.com/in/neilbryan" class="btn-secondary" target="_blank">Connect on LinkedIn</a>
   </div>
 </section>
@@ -647,7 +647,7 @@
         <img src="NRB_Logo_1.png" alt="NRB Cloud Solutions" />
         <p>Principal-level Microsoft Azure consultancy for enterprises across the UK and Europe. Cloud architecture, security, and FinOps — delivered personally by Neil Bryan.</p>
         <div class="footer-contact">
-          <a href="/cdn-cgi/l/email-protection#e78e898188a7899585848b88928394888b92938e888994c984888a"><span class="__cf_email__" data-cfemail="9af3f4fcf5daf4e8f8f9f6f5effee9f5f6efeef3f5f4e9b4f9f5f7">[email&#160;protected]</span></a>
+          <a href="/cdn-cgi/l/email-protection#e1888f878ea18f9383828d8e9485928e8d9495888e8f92cf828e8c"><span class="__cf_email__" data-cfemail="fc95929a93bc928e9e9f909389988f939089889593928fd29f9391">[email&#160;protected]</span></a>
           <a href="#">Paphos, Cyprus · Serving UK &amp; Europe</a>
         </div>
       </div>
@@ -689,7 +689,7 @@
         <a href="https://www.linkedin.com/in/neilbryan" target="_blank" aria-label="LinkedIn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2zM4 6a2 2 0 100-4 2 2 0 000 4z"/></svg>
         </a>
-        <a href="/cdn-cgi/l/email-protection#7c15121a133c120e1e1f101309180f131009081513120f521f1311" aria-label="Email">
+        <a href="/cdn-cgi/l/email-protection#caa3a4aca58aa4b8a8a9a6a5bfaeb9a5a6bfbea3a5a4b9e4a9a5a7" aria-label="Email">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         </a>
       </div>
@@ -722,5 +722,30 @@
     document.querySelectorAll('.pillar-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
   }
 
-  // Scroll reveal
-  const observer = new IntersectionObserve
+  // Scroll reveal - safe: visible by default, JS adds animation
+  if ('IntersectionObserver' in window) {
+    const revealEls = document.querySelectorAll('.reveal');
+    revealEls.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(28px)';
+      el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+    });
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    revealEls.forEach(el => observer.observe(el));
+  }
+
+  // Nav scroll shadow
+  window.addEventListener('scroll', () => {
+    document.getElementById('mainNav').style.boxShadow = window.scrollY > 40 ? '0 1px 0 rgba(0,0,0,0.07)' : 'none';
+  });
+</script>
+</body>
+</html>
